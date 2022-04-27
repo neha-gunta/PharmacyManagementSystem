@@ -160,9 +160,9 @@ app.get('/getCategory', (request, response) => {
 })
 
 //read Category by name
-app.get('/getCategory/:name', (request, response) => {
+app.get('/getCategoryByName/:name', (request, response) => {
     const name = request.params.name;
-    let sql = `SELECT * FROM category WHERE CATEGORYNAME='${name}'`;
+    let sql = `SELECT * FROM category WHERE CATEGORYNAME COLLATE utf8mb4_general_ci LIKE '%${name}%'`;
     connection.query(sql, (err, result) => {
         if(err) throw err;
         response.json(result);
@@ -222,10 +222,10 @@ app.get('/getCompany', (request, response) => {
 })
 
 //get company by name
-app.get("/getCompany/:companyName", (request, response) => {
+app.get("/getCompanyByName/:companyName", (request, response) => {
     const companyName = request.params.companyName;
     console.log(companyName);
-    let sql = `SELECT * FROM company WHERE companyName='${companyName}';`;
+    let sql = `SELECT * FROM company WHERE companyName COLLATE utf8mb4_general_ci like '%${companyName}%';`;
     connection.query(sql, (error, result) => {
       if (error) throw error;
       response.json(result);
@@ -353,6 +353,17 @@ app.get('/getCustomerById/:id', (request, response) => {
     })
 })
 
+//get customer by name
+app.get('/getCustomerByName/:name', (request, response) => {
+    const name = request.params.name;
+    console.log(request.params.name);
+    let sql = `SELECT * FROM CUSTOMER WHERE CUSTOMERNAME COLLATE utf8mb4_general_ci LIKE '%${name}%';`;
+    connection.query(sql, (error, result) => {
+        if(error) response.send(error);
+        else response.send(result);
+    })
+})
+
 //get customer by number
 app.get('/getCustomerByNumber/:num', (request, response) => {
     const num = request.params.num;
@@ -365,13 +376,10 @@ app.get('/getCustomerByNumber/:num', (request, response) => {
 })
 //insertCustomer
 app.post('/insertCustomer', (request, response) => {
-    var data = request.body;
-    //console.log(name, job);
-   
-    connection.query('INSERT INTO customer SET ?',data, (err, res) => {
-        if(err) throw err;
-        else
-        response.send("result");
+    var {customerName, customerPhoneNumber} = request.body;   
+    connection.query(`INSERT INTO customer VALUES('${customerName}', ${customerPhoneNumber})`, (error, result) => {
+        if(error) response.send(error);
+        else response.send(result);
         //response.json(res);
     })
 })
@@ -523,5 +531,4 @@ app.listen(process.env.PORT, () => {
         console.log("Database connected");
     })
 });
-
 

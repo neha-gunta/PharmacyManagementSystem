@@ -12,42 +12,53 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
- 
+import { Autocomplete } from "@mui/material";
+
 export default function AddMedicine() {
   const classes = useStyles();
   const [desc, setDesc] = useState("");
   const [title, setTitle] = useState("");
   const [company, setCompany] = useState("");
-  const [category, setCategory] = useState("");
-  const [companies,setCompanies]=useState([]);
-  const[categories,setCategories]=useState(["e"]);
-  categories.map((x)=>console.log(x.categoryName));
+  const [category, setCategory] = useState(" ");
+  const [companies, setCompanies] = useState([]);
+  const [categories, setCategories] = useState(["e"]);
+  const [categoryNames, setCategoryNames] = useState([]);
+  function handleCategoryChange(event, value) {
+    setCategory(value);
+  }
+  function handleCompanyChange(event, value) {
+    setCompany(value);
+  }
   const addmedicine = (e) => {
     e.preventDefault();
-    if(title=="" || desc=="") alert("All the fields have to be filled") 
-    else{ 
-    Axios.post("http://localhost:5000/addMedicine", {
-      medicineName:title, 
-     medicineDescription:desc,
-     companyName:company,
-      categoryName:category}).then((response) => {
-      console.log(response.data);
-    }).catch((err)=>console.log(err));}
+    console.log(company);
+    if (title == "" || desc == "") alert("All the fields have to be filled");
+    else {
+      Axios.post("http://localhost:5000/addMedicine", {
+        medicineName: title,
+        medicineDescription: desc,
+        companyName: company.companyName,
+        categoryName: category.categoryName,
+      })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => console.log(err));
+    }
   };
-  
-  useEffect(()=>{
-    Axios.get("http://localhost:5000/getCategory").then((resp)=>{
-      
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/getCategory").then((resp) => {
       setCategories(resp.data);
-      categories.map((x)=>console.log(x.categoryName));
-    })
-    Axios.get("http://localhost:5000/getCompany").then((resp)=>{
-      
+      categories.map((x) => console.log(x.categoryName));
+    });
+    setCategoryNames ( ()=> categories.map((x) => x.categoryName));
+    Axios.get("http://localhost:5000/getCompany").then((resp) => {
       setCompanies(resp.data);
-      companies.map((x)=>console.log(x.companyName));
-    })
-  },[])
- 
+      companies.map((x) => console.log(x.companyName));
+    });
+  }, []);
+
   const reset = (e) => {
     e.preventDefault();
     setTitle("");
@@ -55,7 +66,7 @@ export default function AddMedicine() {
     setDesc("");
     setCategory("");
   };
- 
+
   return (
     <Paper
       elevation={16}
@@ -74,8 +85,8 @@ export default function AddMedicine() {
       >
         Add a Medicine
       </Typography>
- 
-      <FormControl sx={{ m: 0, minWidth: "100%" }}>
+
+      {/* <FormControl sx={{ m: 0, minWidth: "100%" }}>
         <InputLabel id="label">Select Category</InputLabel>
         <Select
           labelId="category"
@@ -86,17 +97,40 @@ export default function AddMedicine() {
             setCategory(e.target.value);
           }}
         >
-          
-          {categories.map((x)=>{
-            return( 
-            <MenuItem value={`${x.categoryName}`}>{ `${x.categoryName}`}</MenuItem>)
+          {categories.map((x) => {
+            return (
+              <MenuItem
+                value={`${x.categoryName}`}
+              >{`${x.categoryName}`}</MenuItem>
+            );
           })}
-          
-          
         </Select>
-      </FormControl>
- 
-      <FormControl sx={{ m: 0, minWidth: "100%" }}>
+      </FormControl> */}
+
+      <Autocomplete
+        fullWidth
+        value={category}
+        id="combo-box-demo"
+        options={categories}
+        getOptionLabel={(category) => category.categoryName || "" }
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Select Category" />}
+        onChange={handleCategoryChange}
+      />
+
+<Autocomplete
+        fullWidth
+        value={company}
+        id="combo-box-demo"
+        options={companies}
+        getOptionLabel={(company) => company.companyName || "" }
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Select Company" />}
+        onChange={handleCompanyChange}
+      />
+
+
+      {/* <FormControl sx={{ m: 0, minWidth: "100%" }}>
         <InputLabel id="label">Select Company</InputLabel>
         <Select
           labelId="label"
@@ -108,13 +142,16 @@ export default function AddMedicine() {
             setCompany(e.target.value);
           }}
         >
-          {companies.map((x)=>{
-            return( 
-            <MenuItem value={`${x.companyName}`}>{ `${x.companyName}`}</MenuItem>)
+          {companies.map((x) => {
+            return (
+              <MenuItem
+                value={`${x.companyName}`}
+              >{`${x.companyName}`}</MenuItem>
+            );
           })}
         </Select>
-      </FormControl>
- 
+      </FormControl> */}
+
       <TextField
         id="title"
         value={title}
@@ -126,7 +163,7 @@ export default function AddMedicine() {
           setTitle(e.target.value);
         }}
       />
- 
+
       <TextField
         id="desc"
         value={desc}
@@ -138,7 +175,7 @@ export default function AddMedicine() {
           setDesc(e.target.value);
         }}
       />
- 
+
       <Stack className={classes.buttonstack} direction="row" spacing={2}>
         <Button variant="contained" onClick={addmedicine}>
           Add

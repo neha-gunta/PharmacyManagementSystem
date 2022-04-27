@@ -19,6 +19,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Axios from "axios";
+import { Autocomplete } from "@mui/material";
+import { TextField } from "@mui/material";
 
 const drawerWidth = 200;
 
@@ -26,10 +28,21 @@ export default function CategoryReport() {
   const classes = useStyles();
 
   const [categories, setCategories] = useState([]);
-
+  const [category, setCategory] = useState(" ");
     useEffect(() => {
         getCategories();
     }, []);
+
+    function handleCategoryChange(event, value) {
+      setCategory(value);
+      console.log(category)
+      Axios.get(`http://localhost:5000/getCategory/${category.categoryName}`).then(
+      (resp) => {
+        console.log(resp.data)
+        setCategories(resp.data)
+      }
+    );
+    }
 
     const getCategories = () => {
         Axios.get("http://localhost:5000/getCategory")
@@ -56,6 +69,16 @@ export default function CategoryReport() {
         margin: 2,
       }}
     >
+      <Autocomplete
+        fullWidth
+        value={category}
+        id="combo-box-demo"
+        options={categories}
+        getOptionLabel={(category) => category.categoryName || "" }
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Select Category" />}
+        onChange={handleCategoryChange}
+      />
       <Typography
         variant="h5"
         marginLeft={1}

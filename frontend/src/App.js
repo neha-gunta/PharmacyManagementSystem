@@ -17,6 +17,7 @@ import StockReport from "./pages/DashBoard/StockReport";
 import UpdateMedicine from "./pages/DashBoard/UpdateMedicine";
 import UpdateCompany from "./pages/DashBoard/UpdateCompany";
 import UpdateCategory from "./pages/DashBoard/UpdateCategory";
+import ComboBox from "./pages/DashBoard/masti";
 function App() {
   return (
     <div className="wrapper">
@@ -50,6 +51,11 @@ function App() {
             <Dashboard>
               <StartSell />
             </Dashboard>
+          </Route>
+          <Route exact path={"/masti"}>
+           
+              <ComboBox />
+        
           </Route>
           <Route exact path={"/OrderReport"}>
             <Dashboard>
