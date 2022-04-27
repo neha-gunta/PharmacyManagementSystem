@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { withRouter, RouteComponentProps } from "react-router";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
@@ -19,13 +20,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Axios from "axios";
+import Autocomplete from '@mui/material/Autocomplete';
+import { TextField } from "@mui/material";
 
 const drawerWidth = 200;
 
-export default function CompanyReport() {
+function CompanyReport(props: MyComponent) {
   const classes = useStyles();
 
   const [companies, setCompanies] = useState([]);
+  const [companySuggestions, setCompSuggest] = useState([]);
 
     useEffect(() => {
         getCompanies()
@@ -65,6 +69,33 @@ export default function CompanyReport() {
       >
         Company Report
       </Typography>
+
+      {/* <SearchBar
+      onChange={() => console.log('onChange')}
+      onRequestSearch={() => console.log('onRequestSearch')}
+      style={{
+        margin: '0 auto',
+        maxWidth: 800
+      }}
+      /> */}
+
+        {/* <Autocomplete
+        freeSolo
+        id="free-solo-2-demo"
+        disableClearable
+        options={companySuggestions.map((option) => option.companyName)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search input"
+            InputProps={{
+              ...params.InputProps,
+              type: 'search',
+            }}
+          />
+        )}
+      /> */}
+
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -87,7 +118,7 @@ export default function CompanyReport() {
                   <Button id={company.companyName} onClick={() => {deleteCompany(company.companyName)}}>
                     Delete
                   </Button>
-                  <Button id={company.companyID}>
+                  <Button id={company.companyName} href={`/UpdateCompany/${company.companyName}`}>
                     Edit
                   </Button>
                 </TableCell>
@@ -102,3 +133,9 @@ export default function CompanyReport() {
     </Paper>
   );
 }
+
+interface MyComponent extends RouteComponentProps {
+  myField: string;
+}
+
+export default withRouter(CompanyReport);

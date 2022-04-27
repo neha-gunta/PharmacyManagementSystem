@@ -92,9 +92,9 @@ function MedicineReport(props: MyComponent) {
                   <Button id={report.medicineID} onClick={() => {deleteMedicine(report.medicineID)}}>
                     Delete
                   </Button>
-                  <Link to={`/UpdateMedicine/${report.medicineID}`}><Button id={report.medicineID}>
+                  <Button id={report.medicineID} href={`/UpdateMedicine/${report.medicineID}`}>
                     Edit
-                  </Button></Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -35,8 +35,8 @@ function UpdateMedicine(props: UpdateProps) {
     else{ 
     Axios.put(`http://localhost:5000/editMedicine/${id}`, {
       medicineName:title, 
-     medicineDescription:desc,
-     companyName:company,
+      medicineDescription:desc,
+      companyName:company,
       categoryName:category}).then((response) => {
       console.log(response.data);
     }).catch((err)=>console.log(err));}
@@ -74,7 +74,7 @@ function UpdateMedicine(props: UpdateProps) {
   };
  
   return (
-      <DashBoard>
+    
     <Paper
       elevation={16}
       className={classes.paper}
@@ -166,7 +166,7 @@ function UpdateMedicine(props: UpdateProps) {
         </Button>
       </Stack>
     </Paper>
-    </DashBoard>
+    
   );
 }
 

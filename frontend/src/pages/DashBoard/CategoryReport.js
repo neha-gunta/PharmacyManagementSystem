@@ -87,7 +87,7 @@ export default function CategoryReport() {
                   <Button id={category.categoryDescription} onClick={() => {deleteCategory(category.categoryName)}}>
                     Delete
                   </Button>
-                  <Button id={category.categoryID}>
+                  <Button id={category.categoryID} href={`/UpdateCategory/${category.categoryName}`}>
                     Edit
                   </Button>
                 </TableCell>

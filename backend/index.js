@@ -104,13 +104,25 @@ app.get('/getMedicine/:id', (request, response) => {
     })
 });
 
+//get medicine by name
+
+app.get('/getMedicineByName/:name', (request, response) => {
+    const name = request.params.name;
+    console.log(name);
+    let sql = `SELECT * FROM MEDICINE WHERE MEDICINENAME='${name}';`
+    connection.query(sql, (error, result) => {
+        if(error) throw error;
+        response.json(result);
+    })
+});
+
 //add medicine
 app.post('/addMedicine', (request, response) => {
     const {medicineName, medicineDescription, companyName, categoryName} = request.body;
     let sql = `INSERT INTO MEDICINE(medicineName, medicineDescription, companyName, categoryName) VALUES('${medicineName}', '${medicineDescription}', '${companyName}', '${categoryName}');`;
     connection.query(sql, (error, result) => {
-        if(error) ;
-        response.json("");
+        if(error) response.json(error);
+        response.json(result);
     })
 });
 
@@ -146,6 +158,17 @@ app.get('/getCategory', (request, response) => {
         response.json(result);
     })
 })
+
+//read Category by name
+app.get('/getCategory/:name', (request, response) => {
+    const name = request.params.name;
+    let sql = `SELECT * FROM category WHERE CATEGORYNAME='${name}'`;
+    connection.query(sql, (err, result) => {
+        if(err) throw err;
+        response.json(result);
+    })
+})
+
 
 //insertCategory
 app.post('/insertCategory', (request, response) => {
@@ -198,6 +221,17 @@ app.get('/getCompany', (request, response) => {
     })
 })
 
+//get company by name
+app.get("/getCompany/:companyName", (request, response) => {
+    const companyName = request.params.companyName;
+    console.log(companyName);
+    let sql = `SELECT * FROM company WHERE companyName='${companyName}';`;
+    connection.query(sql, (error, result) => {
+      if (error) throw error;
+      response.json(result);
+    });
+  });
+
 //insertCompany
 app.post('/insertCompany', (request, response) => {
     var {companyName, companyDescription} = request.body;
@@ -219,9 +253,8 @@ app.put('/editCompany/:name', (request, response) => {
     var {companyName, companyDescription} = request.body;
         //let sql_insert = `UPDATE category SET categoryName=?, categoryDesc=? WHERE categoryName='${nam}`;
     connection.query('UPDATE company SET companyName = ?, companyDescription=? WHERE (companyName = ?);', [companyName, companyDescription, inpu], (err, res) => {
-            if(err) throw err;
-            else
-            response.send("done");
+            if(err) response.send("error");
+            else response.send("done");
             //response.json(res);
         })
     });
@@ -315,8 +348,19 @@ app.get('/getCustomerById/:id', (request, response) => {
     const {id} = request.params;
     let sql = `SELECT * FROM customer WHERE customerID=${id};`;
     connection.query(sql, (error, result) => {
-        if(error) throw error;
-        response.json(result);
+        if(error) response.send("error");
+        else response.json(result);
+    })
+})
+
+//get customer by number
+app.get('/getCustomerByNumber/:num', (request, response) => {
+    const num = request.params.num;
+    console.log(request.params.num);
+    let sql = `SELECT * FROM CUSTOMER WHERE CUSTOMERPHONENUMBER LIKE '%${num}%';`;
+    connection.query(sql, (error, result) => {
+        if(error) response.send("error");
+        else response.send(result);
     })
 })
 //insertCustomer
@@ -475,7 +519,7 @@ app.get('/getOrder', (request, response) => {
 app.listen(process.env.PORT, () => {
     console.log('app is running');
     connection.connect((err) => {
-        if(err) throw err;
+        if(err) console.log(error);
         console.log("Database connected");
     })
 });

@@ -15,6 +15,8 @@ import AddMedicine from "./pages/DashBoard/AddMedicine";
 import MedicineReport from "./pages/DashBoard/MedicineReport";
 import StockReport from "./pages/DashBoard/StockReport";
 import UpdateMedicine from "./pages/DashBoard/UpdateMedicine";
+import UpdateCompany from "./pages/DashBoard/UpdateCompany";
+import UpdateCategory from "./pages/DashBoard/UpdateCategory";
 function App() {
   return (
     <div className="wrapper">
@@ -54,22 +56,32 @@ function App() {
               <OrderReports />
             </Dashboard>
           </Route>
-          <Route path={"/MedicineReport"}>
+          <Route exact path={"/MedicineReport"}>
             <Dashboard>
               <MedicineReport />
             </Dashboard>
           </Route>
-          <Route path={"/UpdateMedicine/:id"}>
+          <Route exact path={"/UpdateMedicine/:id"}>
             <Dashboard>
               <UpdateMedicine />
             </Dashboard>
           </Route>
-          <Route path={"/CategoryReport"}>
+          <Route exact path={"/UpdateCompany/:name"}>
+            <Dashboard>
+              <UpdateCompany />
+            </Dashboard>
+          </Route>
+          <Route exact path={"/UpdateCategory/:name"}>
+            <Dashboard>
+              <UpdateCategory />
+            </Dashboard>
+          </Route>
+          <Route exact path={"/CategoryReport"}>
             <Dashboard>
               <CategoryReport />
             </Dashboard>
           </Route>
-          <Route path={"/AddMedicine"}>
+          <Route exact path={"/AddMedicine"}>
             <Dashboard>
               <AddMedicine />
             </Dashboard>
@@ -79,7 +91,7 @@ function App() {
             <AddStock />
             </Dashboard>
           </Route>
-          <Route path={"/StockReport"}>
+          <Route exact path={"/StockReport"}>
             <Dashboard>
               <StockReport />
             </Dashboard>

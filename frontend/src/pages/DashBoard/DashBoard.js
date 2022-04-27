@@ -47,7 +47,7 @@ export default function DashBoard({children}) {
 
         <List>
           {['Start Sell', 'Order Report', "Add Stock", "Stock Report", "Add Medicine", 'Medicine Report','Add Company', 'Company Report',"Add Category", 'Category Report', "Logout"].map((text, index) => (
-           <Link  href={`${text.replace(/ /g,"")}`} underline="none" >
+           <Link  href={`/${text.replace(/ /g,"")}`} underline="none" >
             <ListItem button key={text} >              
               <ListItemText primary={text} sx={{color:"black",fontWeight:900}} />             
             </ListItem> 
